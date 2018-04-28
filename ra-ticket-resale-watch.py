@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[489]:
+# In[516]:
 
 
 # import necessary packages
@@ -11,66 +11,66 @@ from lxml import html
 from tabulate import tabulate
 
 
-# In[490]:
+# In[518]:
 
 
 # ask for full ra url
-raurl = input("full Resident Advisor URL \n")
+raurl = input("\nfull Resident Advisor URL \n")
 
 # confirm url
-print("\nchecking tickets for\n" + raurl)
+print("\nchecking tickets for\n" + raurl + "\n")
 
 
-# In[491]:
+# In[519]:
 
 
 # send HTTP request and store response
-print("sending http request")
+print("sending http request\n")
 response = re.get(raurl)
 print(response)
 
 
-# In[492]:
+# In[520]:
 
 
 # parse xml tree
 tree = lxml.html.fromstring(response.text)
 
 
-# In[493]:
+# In[521]:
 
 
 # extract and print event title
 event_title = tree.xpath('//div/h1')[0].text
-print("event title: \n" + event_title)
+print("\nevent title: \n" + event_title)
 
 
-# In[494]:
+# In[522]:
 
 
 # extract and print event date
 event_day = tree.xpath('//main/ul/li/section/div/div/div/aside/ul/li/text()')[0]
 event_date = tree.xpath('//main/ul/li/section/div/div/div/aside/ul/li/a/text()')[0]
 event_time = tree.xpath('//main/ul/li/section/div/div/div/aside/ul/li/text()')[1]
-print("date: \n" + event_day + "\n" + event_date + "\n" + event_time)
+print("\ndate: \n" + event_day + "\n" + event_date + "\n" + event_time)
 
 
-# In[495]:
+# In[523]:
 
 
 # extract and print event location
 event_location = tree.xpath('//*[@id="detail"]/ul/li[2]/a[1]/text()')[0]
-print("location:\n" + event_location)
+print("\nlocation:\n" + event_location)
 
 
-# In[496]:
+# In[524]:
 
 
 # extract ticket class list, not used yet
 ticket_classes = tree.xpath('//*[@id="tickets"]/ul/li/@class')
 
 
-# In[497]:
+# In[525]:
 
 
 # extract and print off sale ticket detail lists 
@@ -78,19 +78,17 @@ offsale_types = tree.xpath('//*[@id="tickets"]/ul/li/p/text()')
 offsale_prices = tree.xpath('//*[@id="tickets"]/ul/li/p/span/text()')
 
 
-# In[498]:
+# In[526]:
 
 
-print(offsale_types)
+print("\nthe following tickets are off sale: \n")
+headers = ['ticket', 'price']
+table = zip(offsale_types, offsale_prices)
+print(tabulate(table, headers=headers, floatfmt=".4f"))
+print("\n ... one day ... \n")
 
 
-# In[499]:
-
-
-print(offsale_prices)
-
-
-# In[500]:
+# In[527]:
 
 
 # extract and print on sale ticket detail lists 
@@ -98,43 +96,31 @@ onsale_types = tree.xpath('//*[@id="tickets"]/ul/li/label/p/text()')
 onsale_prices = tree.xpath('//*[@id="tickets"]/ul/li/label/p/span/text()')
 
 
-# In[501]:
-
-
-print(onsale_types)
-
-
-# In[502]:
-
-
-print(onsale_prices)
-
-
-# In[503]:
+# In[529]:
 
 
 # inform whether tickets are on sale, if so, print table and share link
 
 if len(onsale_types)==0:
-    print("nothing on sale:(")
+    print("\nnothing on sale:(\n")
 else:
-    print("the following tickets are on sale: \n \n")
+    print("the following tickets are on sale: \n")
     headers = ['ticket', 'price']
     table = zip(onsale_types, onsale_prices)
     print(tabulate(table, headers=headers, floatfmt=".4f"))
-    print("\n \n go buy them quick " + raurl)
+    print("\ngo buy them quick\n" + raurl)
 
 
 # # old code
 
-# In[504]:
+# In[530]:
 
 
 #for idx, val in enumerate(ticket_classes):
 #    print(idx, val)
 
 
-# In[505]:
+# In[531]:
 
 
 #for item in tree.xpath("//li"):
