@@ -41,7 +41,7 @@ For Mac, I don't know what you should do but it's probably worth Googling "how t
 ```
 git clone https://github.com/12ian34/rattata.git
 cd rattata
-pip install requirements.txt
+pip install -r requirements.txt
 python ra-ticket-resale-watch.py
 ```
 then, enter full resident advisor url in the input field provided and press `Return` and await the SMS from your Twilio phone number to your personal phone number when a ticket becomes available! Remember that for as long as the script is running whilst at least one resale ticket is available, you will be sent up to three texts, after which the script will exit and must be re-run if you still require a ticket.
