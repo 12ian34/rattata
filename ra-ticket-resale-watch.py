@@ -13,7 +13,9 @@ twilio_number = os.environ["TWILIO_NUMBER"]
 my_number = os.environ["MY_NUMBER"]
 raurl = input("\nfull Resident Advisor URL \n")
 
-def check_tickets():
+twilio_text_count = 0
+
+while twilio_text_count < 3:
     print("date:")
     print(datetime.now())
     print("\nchecking tickets for:\n" + raurl + "\n")
@@ -37,33 +39,43 @@ def check_tickets():
     print("\nevent title: \n" + event_title)
     print("\ndate: \n" + event_day + "\n" + event_date + "\n" + event_time)
     print("\nlocation:\n" + event_location)
-    print(f"There are {len(offsale_types)} ticket types off sale")
+    print(f"\nThere are {len(offsale_types)} ticket types off sale")
     print(f"There are {len(onsale_types)} ticket types on sale")
 
-    print("\nthe following tickets are off sale: \n")
-    headers = ['ticket', 'price']
-    table = zip(offsale_types, offsale_prices)
-    print(tabulate(table, headers=headers, floatfmt=".4f"))
-
-    print("\n\nthe following tickets are on sale: \n")
-    headers = ['ticket', 'price']
-    table = zip(onsale_types, onsale_prices)
-    print(tabulate(table, headers=headers, floatfmt=".4f") + "\n")
-
+    if len(offsale_types) > 0:
+        print("\nthe following tickets are off sale: \n")
+        headers = ['ticket', 'price']
+        table = zip(offsale_types, offsale_prices)
+        print(tabulate(table, headers=headers, floatfmt=".4f"))
+    
     if len(onsale_types) > 0:
+        print("\n\nthe following tickets are on sale: \n")
+        headers = ['ticket', 'price']
+        table = zip(onsale_types, onsale_prices)
+        print(tabulate(table, headers=headers, floatfmt=".4f") + "\n")
+        
+        twilio_text_count += 1
+        
+        print("\ntwilio text count:")
+        print(twilio_text_count)
+        
         print("\ngo buy them quick\n" + raurl + "\n")
+        
         client = Client(account_sid, auth_token)
         message = client.messages.create(
             body = "ticket available: " + raurl,
             from_= twilio_number,
             to = my_number
         )
+        
+        print("twilio message id:")
         print(message.sid)
-        # how to stop all twilio credit being used?
-        exit
+        print("\n")
+        
     elif len(onsale_types) == 0:
-        print("nothing on sale. retrying in 5 min")
+        print("twilio text count:")
+        print(twilio_text_count)
+        print("\nnothing on sale :( ... retrying in 5 min\n")
+        time.sleep(300)
 
-while True:
-  check_tickets()
-  time.sleep(300)
+print("script paused at " + str(datetime.now()) + " due to twilio text count being reached! Please restart")
