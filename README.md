@@ -20,7 +20,37 @@ Resident Advisor ticket resale watcher
 - if a ticket is made available via resale, only 3 text messages will be sent after which the script will be exited and will require re-running if tickets are still desired.
 - unknown unknowns.
 
+## Usage
+
+### Compatibility 
+This worked on Arch Linux `5.4.6-arch3-1` and Ubuntu `19.04`. I have a Virtual Private Server from Digital Ocean which is permanently on. I `ssh` into it and run the script in a [tmux](https://wiki.archlinux.org/index.php/tmux) session such that I can disconnect (and thus don't need to leave a physical computer running). This can also be achieved through other, simpler methods but I like this one.
+
+For Windows, (aside from switching to Linux) I recommend you install [Anaconda](https://docs.anaconda.com/anaconda/install/windows/) for the full Python experience, or even [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10) if you want to play around with more Linux tools in a whole `bash`-like environment. Both of these ways require your Windows computer to be kept on while running the script, obviously.
+
+For Mac, I don't know what you should do but it's probably worth Googling "how to run Python script on mac". You'll be able to do it using terminal but I'm not sure if Python comes installed (probably not) and I'm not sure if you'll need `homebrew`.
+
+### Requirements
+
+- Python
+- the Python packages listed in `requirements.txt`
+- a Twilio account (a trial one comes with enough credit for basic usage) with a twilio phone number, your `auth token` and your `SID`
+- the need to buy a ticket to 
+
+### Installation and usage
+
+```
+git clone https://github.com/12ian34/rattata.git
+cd rattata
+pip install requirements.txt
+python ra-ticket-resale-watch.py
+```
+then, enter full resident advisor url in the input field provided and press `Return` and await the SMS from your Twilio phone number to your personal phone number when a ticket becomes available! Remember that for as long as the script is running whilst at least one resale ticket is available, you will be sent up to three texts, after which the script will exit and must be re-run if you still require a ticket.
+
+
 ## Future work
 
 - implement interactive function for setting Environment Variables according to the relevant Twilio and phone number details. 
 - implement interactive function for choosing and setting the correct event URL. 
+- create option for changing wait period between script re-runs.
+- implement functionality for having two different wait periods per day, with a longer wait period being applied during the local night-time of the country in which the event is being held (since people probably put their tickets up for resale when they're awake ;) ).
+- introduce ability to only notify when a certain minimum number of tickets become available.
