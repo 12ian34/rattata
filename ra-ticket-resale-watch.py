@@ -59,9 +59,11 @@ def check_tickets():
             to = my_number
         )
         print(message.sid)
+        # how to stop all twilio credit being used?
+        exit
     elif len(onsale_types) == 0:
         print("nothing on sale. retrying in 5 min")
 
 while True:
   check_tickets()
-  time.sleep(30)
+  time.sleep(300)
