@@ -34,7 +34,7 @@ For Mac, I don't know what you should do but it's probably worth Googling "how t
 - Python
 - the Python packages listed in `requirements.txt`
 - a Twilio account (a trial one comes with enough credit for basic usage) with a twilio phone number, your `auth token` and your `SID`
-- the need to buy a ticket to 
+- the need to buy a ticket to a sold out event on Resident Advisor which has the resale queue active
 
 ### Installation and usage
 
@@ -54,3 +54,4 @@ then, enter full resident advisor url in the input field provided and press `Ret
 - create option for changing wait period between script re-runs.
 - implement functionality for having two different wait periods per day, with a longer wait period being applied during the local night-time of the country in which the event is being held (since people probably put their tickets up for resale when they're awake ;) ).
 - introduce ability to only notify when a certain minimum number of tickets become available.
+- introduce ability for script to check if the resale queue is indeed active and warn if not.
