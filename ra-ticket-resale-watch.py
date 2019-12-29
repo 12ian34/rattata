@@ -29,7 +29,7 @@ my_number = os.environ["MY_NUMBER"]
 raurl = input("\nfull Resident Advisor URL \n")
 
 
-# In[51]:
+# In[59]:
 
 
 def check_tickets():
@@ -70,15 +70,14 @@ def check_tickets():
     print(tabulate(table, headers=headers, floatfmt=".4f") + "\n")
     
     if len(onsale_types) > 0:
-    print("\ngo buy them quick\n" + raurl + "\n")
-    client = Client(account_sid, auth_token)
-    message = client.messages.create(
-        body = "ticket available: " + raurl,
-        from_= twilio_number,
-        to = my_number
-    )
-    print(message.sid)
-            
+        print("\ngo buy them quick\n" + raurl + "\n")
+        client = Client(account_sid, auth_token)
+        message = client.messages.create(
+            body = "ticket available: " + raurl,
+            from_= twilio_number,
+            to = my_number
+        )
+        print(message.sid)
     elif len(onsale_types) == 0:
         print("nothing on sale. retrying in 2 min")
 
