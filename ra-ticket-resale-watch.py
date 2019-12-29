@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[56]:
-
-
 import lxml
 import os
 import requests as re
@@ -13,24 +7,11 @@ from tabulate import tabulate
 from datetime import datetime
 from twilio.rest import Client
 
-
-# In[57]:
-
-
 account_sid = os.environ["TWILIO_SID"]
 auth_token = os.environ["TWILIO_AUTH_TOKEN"]
 twilio_number = os.environ["TWILIO_NUMBER"]
 my_number = os.environ["MY_NUMBER"]
-
-
-# In[20]:
-
-
 raurl = input("\nfull Resident Advisor URL \n")
-
-
-# In[59]:
-
 
 def check_tickets():
     print("date:")
@@ -58,7 +39,7 @@ def check_tickets():
     print("\nlocation:\n" + event_location)
     print(f"There are {len(offsale_types)} ticket types off sale")
     print(f"There are {len(onsale_types)} ticket types on sale")
-    
+
     print("\nthe following tickets are off sale: \n")
     headers = ['ticket', 'price']
     table = zip(offsale_types, offsale_prices)
@@ -68,7 +49,7 @@ def check_tickets():
     headers = ['ticket', 'price']
     table = zip(onsale_types, onsale_prices)
     print(tabulate(table, headers=headers, floatfmt=".4f") + "\n")
-    
+
     if len(onsale_types) > 0:
         print("\ngo buy them quick\n" + raurl + "\n")
         client = Client(account_sid, auth_token)
@@ -79,13 +60,8 @@ def check_tickets():
         )
         print(message.sid)
     elif len(onsale_types) == 0:
-        print("nothing on sale. retrying in 2 min")
-
-
-# In[ ]:
-
+        print("nothing on sale. retrying in 5 min")
 
 while True:
-  count_tickets()
-  time.sleep(300)
-
+  check_tickets()
+  time.sleep(30)
