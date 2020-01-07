@@ -55,3 +55,4 @@ then, enter full resident advisor url in the input field provided and press `Ret
 - implement functionality for having two different wait periods per day, with a longer wait period being applied during the local night-time of the country in which the event is being held (since people probably put their tickets up for resale when they're awake ;) ).
 - introduce ability to only notify when a certain minimum number of tickets become available.
 - introduce ability for script to check if the resale queue is indeed active and warn if not.
+- allow user to specify the particular type of tickets they're looking for (useful for events with multiple tiers of tickets or festivals with multiple days as separate tickets)
