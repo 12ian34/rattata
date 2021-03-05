@@ -17,7 +17,8 @@ Resident Advisor ticket resale watcher
 - one must manually find the resident advisor URL (e.g. https://www.residentadvisor.net/events/1346399) for the event of interest. Upon running the script, the user is asked for the URL which must then manually be entered.
 - one must manually create a Twilio account, and also have a mobile number. The relevant details must then be set as Environment Variables for the script to pick up.
 - the defined interval doesn't take into account the time it takes to run the script. This isn't very Pythonic but I don't care.
-- if a ticket is made available via resale, only 3 text messages will be sent after which the script will be exited and will require re-running if tickets are still desired.
+- if a ticket is made available via resale, only 3 text messages will be sent (at hourly intervals) after which the script will be exited and will require re-running if tickets are still desired.
+- this script completely ignores "add-ons" (e.g. car parking pass)
 - unknown unknowns.
 
 ## Usage
@@ -42,10 +43,13 @@ For Mac, I don't know what you should do but it's probably worth Googling "how t
 git clone https://github.com/12ian34/rattata.git
 cd rattata
 pip install -r requirements.txt
+export TWILIO_SID="<your twilio SID>"
+export MY_NUMBER="<your mobile number with the plus sign and international prefix>"
+export TWILIO_AUTH_TOKEN="<your twilio auth token>"
+export TWILIO_NUMBER="<your twilio virtual mobile number"
 python ra-ticket-resale-watch.py
 ```
-then, enter full resident advisor url in the input field provided and press `Return` and await the SMS from your Twilio phone number to your personal phone number when a ticket becomes available! Remember that for as long as the script is running whilst at least one resale ticket is available, you will be sent up to three texts, after which the script will exit and must be re-run if you still require a ticket.
-
+then, enter full resident advisor url in the input field provided and press `Return` and await the SMS from your Twilio phone number to your personal phone number when a ticket becomes available! Remember that for as long as the script is running whilst at least one resale ticket is available, you will be sent up to three texts at hourly intervals, after which the script will exit and must be re-run if you still require a ticket.
 
 ## Future work
 
@@ -56,3 +60,4 @@ then, enter full resident advisor url in the input field provided and press `Ret
 - introduce ability to only notify when a certain minimum number of tickets become available.
 - introduce ability for script to check if the resale queue is indeed active and warn if not.
 - allow user to specify the particular type of tickets they're looking for (useful for events with multiple tiers of tickets or festivals with multiple days as separate tickets)
+- include and monitor "add-ons" to an event (e.g. car parking pass)
