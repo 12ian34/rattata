@@ -1,3 +1,4 @@
+import inquirer
 import lxml
 import os
 import requests as re
@@ -26,15 +27,27 @@ def parse_url(url):
     print(response)
     return tree
 
-while twilio_text_count < 3:
-    tree = parse_url(url_embedtickets)
+def get_tickets(tree):
     ticket_classes = tree.xpath('//*[@id="ticket-types"]/ul[@data-ticket-info-selector-id="tickets-info"]/li/@class')
     offsale_types = tree.xpath('//*[@id="ticket-types"]/ul[@data-ticket-info-selector-id="tickets-info"]/li[@class="closed"]/div/div[@class="type-title"]/text()')
     offsale_prices = tree.xpath('//*[@id="ticket-types"]/ul[@data-ticket-info-selector-id="tickets-info"]/li[@class="closed"]/div/div[@class="type-price"]/text()')
     #test below with multiple currently onsale tickets
     onsale_types = tree.xpath('//*[@id="ticket-types"]/ul[@data-ticket-info-selector-id="tickets-info"]/li[@class="onsale but"]/label/div[@class="pr8"]/text()')
     onsale_prices = tree.xpath('//*[@id="ticket-types"]/ul[@data-ticket-info-selector-id="tickets-info"]/li[@class="onsale but"]/label/div[@class="type-price"]/text()')
-    
+    return(
+        ticket_classes,
+        offsale_types,
+        offsale_prices,
+        onsale_types,
+        onsale_prices,
+    )
+
+def choose_ticket(offsale_types, onsale_types):
+    question = [inquirer.List('ticket', message="Which ticket do you want?", choices=offsale_types + onsale_types)]
+    answer = inquirer.prompt(question)
+    return answer
+
+def show_tickets(offsale_types, onsale_types):
     if len(offsale_types) > 0:
         print("\nthe following tickets are off sale: \n")
         headers = ['ticket', 'price']
@@ -46,25 +59,45 @@ while twilio_text_count < 3:
         headers = ['ticket', 'price']
         table = zip(onsale_types, onsale_prices)
         print(tabulate(table, headers=headers, floatfmt=".4f") + "\n")
-        twilio_text_count += 1
-        print("\ntwilio text count:")
-        print(twilio_text_count)
-        print("\ngo buy them quick\n" + url_ra + "\n")
-        client = Client(TWILIO_SID, TWILIO_AUTH_TOKEN)
-        message = client.messages.create(
-            body = "ticket available: " + url_ra,
-            from_= TWILIO_NUMBER,
-            to = MY_NUMBER
-        )
-        print("twilio message id:")
-        print(message.sid)
-        print("\n")
-        time.sleep(3600)
 
-    elif len(onsale_types) == 0:
-        print("\ntwilio text count:")
-        print(twilio_text_count)
-        print("\nnothing on sale :( ... retrying in 5 min\n")
+def check_tickets(answer, onsale_types):
+    if answer['ticket'] in onsale_types:
+        return True
+    else:
+        return False
+
+def send_text():
+    global twilio_text_count
+    print("\nyour tickets are available! go buy them quick\n" + url_ra + "\n")
+    client = Client(TWILIO_SID, TWILIO_AUTH_TOKEN)
+    message = client.messages.create(
+        body = "ticket available! : " + url_ra,
+        from_= TWILIO_NUMBER,
+        to = MY_NUMBER)
+    twilio_text_count += 1
+    print("twilio message id:")
+    print(message.sid)
+    print("\n")
+    return twilio_text_count
+
+(ticket_classes,
+ offsale_types,
+ offsale_prices,
+ onsale_types,
+ onsale_prices,
+) = get_tickets(parse_url(url_embedtickets))
+show_tickets(offsale_types, onsale_types)
+answer = choose_ticket(offsale_types, onsale_types)
+print(answer)
+twilio_text_count = 0
+
+while twilio_text_count < 3:
+    get_tickets(parse_url(url_embedtickets))
+    if check_tickets(answer, onsale_types) == True:
+        send_text()
+        time.sleep(3600)
+    elif check_tickets(answer, onsale_types) == False:
+        print("\nnothing on sale :( ... retrying in 3 min\n")
         time.sleep(180)
 
-print("script paused at " + str(datetime.now()) + " due to twilio text count being reached! Please manually restart")
+print("script paused at " + str(datetime.now()) + " because we've already sent you 2 texts! Please manually restart")
