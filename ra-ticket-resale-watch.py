@@ -43,7 +43,7 @@ def get_tickets(tree):
     )
 
 def choose_ticket(offsale_types, onsale_types):
-    question = [inquirer.List('ticket', message="Which ticket do you want?", choices=offsale_types + onsale_types)]
+    question = [inquirer.List('ticket', message="Use your arrow keys to select the ticket you'd like from the list below and then press Enter. Your current selection is", choices=offsale_types + onsale_types)]
     answer = inquirer.prompt(question)
     return answer
 
@@ -88,16 +88,16 @@ def send_text():
 ) = get_tickets(parse_url(url_embedtickets))
 show_tickets(offsale_types, onsale_types)
 answer = choose_ticket(offsale_types, onsale_types)
-print(answer)
 twilio_text_count = 0
 
 while twilio_text_count < 3:
     get_tickets(parse_url(url_embedtickets))
     if check_tickets(answer, onsale_types) == True:
         send_text()
+        print('\nchecking again in one hour ...')
         time.sleep(3600)
     elif check_tickets(answer, onsale_types) == False:
-        print("\nnothing on sale :( ... retrying in 3 min\n")
+        print('\nnothing on sale :( ... retrying in 3 min\n')
         time.sleep(180)
 
 print("script paused at " + str(datetime.now()) + " because we've already sent you 2 texts! Please manually restart")
