@@ -29,6 +29,7 @@ Personally, I have a Raspberry Pi permanently switched on so I run the script fr
 
 - Python 3.6 or later
 - the Python packages listed in `requirements.txt` to be installed
+- if you're using Raspbian or the newer Raspberry PI OS, `libxslt-dev` is required to be installed since it's a requirement of the `lxml` package that isn't installed by default for some reason. To install: `apt install libxslt-dev`
 - a Twilio account (a trial one comes with enough credit for basic usage) with a twilio phone number, your `auth token` and your `SID`
 - the need to buy a ticket to a sold out event on Resident Advisor which has the resale queue active
 
