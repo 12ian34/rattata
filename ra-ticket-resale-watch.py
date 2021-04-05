@@ -2,6 +2,7 @@ import inquirer
 import lxml
 import os
 import requests as re
+import sys
 import time
 from lxml import html
 from tabulate import tabulate
@@ -13,7 +14,17 @@ TWILIO_AUTH_TOKEN = os.environ["TWILIO_AUTH_TOKEN"]
 TWILIO_NUMBER = os.environ["TWILIO_NUMBER"]
 MY_NUMBER = os.environ["MY_NUMBER"]
 twilio_text_count = 0
-url_ra = input("\nfull Resident Advisor URL \n")
+
+print(sys.argv)
+if len(sys.argv) > 2:
+    print('you have provided too many arguments! just run the script without an argument and you will be prompted for the URL to track, otherwise, pass the URL as one argument e.g.\n python ra-ticket-resale-watch.py https://ra.co/events/1432652')
+
+if len(sys.argv) == 2:
+    url_ra = sys.argv[1]
+
+if len(sys.argv) < 2:
+    url_ra = input("\nfull Resident Advisor URL \n")
+
 url_embedtickets = url_ra.strip("/").replace("events", "widget/event") + "/embedtickets"
 
 def parse_url(url):
@@ -101,3 +112,4 @@ while twilio_text_count < 3:
         time.sleep(180)
 
 print("script paused at " + str(datetime.now()) + " because we've already sent you 2 texts! Please manually restart")
+
