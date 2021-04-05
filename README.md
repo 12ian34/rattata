@@ -14,22 +14,24 @@ Resident Advisor ticket resale watcher
 
 ## Limitations
 
-- one must manually find the resident advisor URL (e.g. https://ra.co/events/1432652) for the event of interest. Upon running the script, the user is asked for the URL which must then manually be entered.
+- one must manually find the resident advisor URL (e.g. https://ra.co/events/1432652) for the event of interest. This can be passed as an argument to the script. If no argument is passed, the user is prompted to enter the URL which must then manually be entered.
 - one must manually create a Twilio account, and also have a mobile number. The relevant details must then be set as Environment Variables for the script to pick up.
 - if a ticket is made available via resale, only 2 text messages will be sent (at hourly intervals) after which the script will be exited and will require re-running if tickets are still desired.
-- unknown unknowns.
+- unknown unknowns...
 
 ## Usage
 
 ### Compatibility 
-This worked on Arch Linux `5.4.6-arch3-1` onwards, Ubuntu `19.04`, Windows Subsystem for Linux (Ubuntu 19.04 I think) and a couple of Raspberry Pis running various versions of Raspbian and the latest (as of Feb 2021) Raspberry Pi OS Lite. 
+This worked on Arch Linux `5.4.6-arch3-1` onwards, Ubuntu `19.04`, Windows Subsystem for Linux (Ubuntu 19.04 I think), a couple of Raspberry Pis running various versions of Raspbian and the latest (as of Feb 2021) Raspberry Pi OS Lite and also via Termux, locally on Android.
 Personally, I have a Raspberry Pi permanently switched on so I run the script from there, accessing it via `ssh` and running the script in a [tmux](https://wiki.archlinux.org/index.php/tmux) session such that I can disconnect from the session as the script runs.
+An easier solution which doesn't require extra hardware is to run it via Termux on Android.
 
 ### Requirements
 
 - Python 3.6 or later
 - the Python packages listed in `requirements.txt` to be installed
-- if you're using Raspbian or the newer Raspberry PI OS, `libxslt-dev` is required to be installed since it's a requirement of the `lxml` package that isn't installed by default for some reason. To install: `apt install libxslt-dev`
+- if you're using Raspbian or the newer Raspberry PI OS, `libxslt-dev` is required to be installed since it's a requirement of the `lxml` package that isn't installed by default for some reason. To install: `apt install libxslt-dev`.
+- if you're using Termux on Android (or perhaps other devices), you need to install `libxslt` and `libxml2`
 - a Twilio account (a trial one comes with enough credit for basic usage) with a twilio phone number, your `auth token` and your `SID`
 - the need to buy a ticket to a sold out event on Resident Advisor which has the resale queue active
 
@@ -43,9 +45,9 @@ export TWILIO_SID="<your twilio SID>"
 export MY_NUMBER="<your mobile number with the plus sign and international prefix>"
 export TWILIO_AUTH_TOKEN="<your twilio auth token>"
 export TWILIO_NUMBER="<your twilio virtual mobile number"
-python ra-ticket-resale-watch.py
+python ra-ticket-resale-watch.py [full resident advisor event url]
 ```
-then, enter full resident advisor url in the input field provided and press `Return` and await the SMS from your Twilio phone number to your personal phone number when a ticket becomes available! Remember that for as long as the script is running whilst at least one resale ticket is available, you will be sent up to three texts at hourly intervals, after which the script will exit and must be re-run if you still require a ticket.
+if you passed the url as an argument, you're all set. Otherwise, you'll be prompted to enter a url into the input field provided, once you've done that, press `Return` and await the SMS from your Twilio phone number to your personal phone number when a ticket becomes available! Remember that for as long as the script is running whilst at least one resale ticket is available, you will be sent up to three texts at hourly intervals, after which the script will exit and must be re-run if you still require a ticket.
 
 ## Future work
 
@@ -54,4 +56,5 @@ then, enter full resident advisor url in the input field provided and press `Ret
 - allow user to select a minimum quantity of tickets required.
 - warn user in case resale queue is not active for the event.
 - allow user to track multiple different ticket types (e.g. different sale stages, or ticket + car park pass).
+- allow user to track multiple events with one single script invocation, perhaps through multiple arguments.
 - test script against more events. perhaps there are other issues such as odd ticketing structures and hierarchies.
