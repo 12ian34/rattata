@@ -55,6 +55,5 @@ if you passed the url as an argument, you're all set. Otherwise, you'll be promp
 - adjust wait period based on event local time, with longer wait periods during the night.
 - allow user to select a minimum quantity of tickets required.
 - warn user in case resale queue is not active for the event.
-- allow user to track multiple different ticket types (e.g. different sale stages, or ticket + car park pass).
 - allow user to track multiple events with one single script invocation, perhaps through multiple arguments.
 - test script against more events. perhaps there are other issues such as odd ticketing structures and hierarchies.
