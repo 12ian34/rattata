@@ -109,7 +109,7 @@ while twilio_text_count < 3:
         print('\nchecking again in one hour ...')
         time.sleep(3600)
     elif check_tickets(answer, onsale_types) == False:
-        print('\nyour chosen ticket is still not on sale :( ... retrying in 3 min\n')
+        print('\nyour chosen ticket is still not on sale :( ... retrying in 60 seconds\n')
         time.sleep(60)
 
 print("script paused at " + str(datetime.now()) + " because we've already sent you 2 texts! Please manually restart")
