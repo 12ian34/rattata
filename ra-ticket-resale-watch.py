@@ -1,12 +1,13 @@
-import inquirer
-import lxml
 import os
-import requests as re
 import sys
 import time
+from datetime import datetime
+
+import inquirer
+import lxml
+import requests as re
 from lxml import html
 from tabulate import tabulate
-from datetime import datetime
 from twilio.rest import Client
 
 TWILIO_SID = os.environ["TWILIO_SID"]
@@ -54,7 +55,7 @@ def get_tickets(tree):
     )
 
 def choose_ticket(offsale_types, onsale_types):
-    question = [inquirer.List('ticket', message="Use your arrow keys to select the ticket you'd like from the list below and then press Enter. Your current selection is", choices=offsale_types + onsale_types)]
+    question = [inquirer.Checkbox('ticket', message="Select the ticket(s) you'd like from the list below and then press Enter. Your current selection is", choices=offsale_types + onsale_types)]
     answer = inquirer.prompt(question)
     return answer
 
@@ -72,11 +73,11 @@ def show_tickets(offsale_types, onsale_types):
         print(tabulate(table, headers=headers, floatfmt=".4f") + "\n")
 
 def check_tickets(answer, onsale_types):
-    if answer['ticket'] in onsale_types:
-        return True
-    else:
-        return False
-
+    for ticket_type in answer['ticket']:
+        if ticket_type in onsale_types:
+            return True
+    return False
+ 
 def send_text():
     global twilio_text_count
     print("\nyour tickets are available! go buy them quick\n" + url_ra + "\n")
